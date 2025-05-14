@@ -1,0 +1,49 @@
+#define GREEN 2
+#define YELLOW 3
+#define RED 4
+
+// In Arduino as in C++ you must define any variable. In this case the variable BLUE is associated with digital pin out 2. Which is connected to our BLUE LED.
+
+int sensorPin = A1; //this is the Arduino pin that will read the sensor output
+
+int sensorInput; //the variable we will use to store the sensor input
+double temp; //the variable we will use to store the temperature in degrees.
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600); // Initialize Serial Port at 9600 baud (default)
+
+  pinMode(GREEN, OUTPUT); // This is telling Arduino which pins are in use, and what we are going to use them for. In this case output.
+  pinMode(YELLOW, OUTPUT);
+  pinMode(RED, OUTPUT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  sensorInput = analogRead(A1); // read the analog sensor and store it
+  temp = (double)sensorInput / 1024; //find percentage of input reading
+  temp = temp * 5; //multiply by 5V to get voltage
+  temp = temp - 0.5; //subtract the offset
+  temp = temp * 100; //Convert to degrees
+
+  Serial.print("Current Temperature: ");
+  Serial.println(temp);
+  delay(500);
+
+  if(temp<26){
+    digitalWrite(GREEN, HIGH); //digitalWrite() is a function that sends a signal to a given pin. In this case the HIGH signal which simply means turn LED on.
+    digitalWrite(YELLOW, LOW); // turns LED off.
+    digitalWrite(RED, LOW);
+  }
+  else if(temp >= 26 && temp < 29){
+    digitalWrite(GREEN, LOW);
+    digitalWrite(YELLOW, HIGH);
+    digitalWrite(RED, LOW);
+  }
+  else if(temp >= 29){
+    digitalWrite(GREEN, LOW);
+    digitalWrite(YELLOW, LOW);
+    digitalWrite(RED, HIGH);
+  }
+}
+
